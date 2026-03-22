@@ -5,8 +5,11 @@ Provides the interactive command-line interface for the calculator.
 """
 
 from typing import Union
+from pathlib import Path
 from .calculator import Calculator
 from .validator import InputValidator, ValidationError
+from .history import CalculationHistory
+from .logger import OperationLogger
 
 
 class CLI:
@@ -17,6 +20,8 @@ class CLI:
         self.calculator = Calculator()
         self.validator = InputValidator()
         self.running = True
+        self.history = CalculationHistory(Path("history.json"))
+        self.logger = OperationLogger(Path("logs.txt"))
 
     def display_welcome(self):
         """Display welcome message."""
@@ -35,7 +40,12 @@ class CLI:
         print("  10 - 4")
         print("  6 * 7")
         print("  20 / 4")
+        print("\nCommands:")
+        print("  history     - Show last 10 calculations")
+        print("  history N   - Show last N calculations")
+        print("  clear       - Clear history")
         print()
+
 
     def parse_input(self, user_input: str) -> tuple:
         """
@@ -112,17 +122,53 @@ class CLI:
                     self.display_help()
                     continue
                 
+                if user_input.lower() == 'history':
+                    self._show_history(10)
+                    continue
+                
+                if user_input.lower().startswith('history '):
+                    try:
+                        n = int(user_input.split()[1])
+                        self._show_history(n)
+                    except (ValueError, IndexError):
+                        print("Usage: history [N]")
+                    continue
+                
+                if user_input.lower() == 'clear':
+                    self.history.clear()
+                    print("History cleared.")
+                    self.logger.log("History cleared")
+                    continue
+                
                 num1, operation, num2 = self.parse_input(user_input)
                 result = self.execute_operation(num1, operation, num2)
                 
                 print(f"Result: {num1} {operation} {num2} = {result}")
                 
+                # Log and save to history
+                self.logger.log_operation(num1, operation, num2, result)
+                self.history.add(f"{num1} {operation} {num2} = {result}")
+                
             except ValidationError as e:
                 print(f"Validation Error: {e}")
+                self.logger.log_error(str(e))
             except ValueError as e:
                 print(f"Error: {e}")
+                self.logger.log_error(str(e))
             except Exception as e:
                 print(f"Unexpected error: {e}")
+                self.logger.log_error(str(e))
+
+    def _show_history(self, n: int = 10):
+        """Show last N history entries."""
+        entries = self.history.get_last(n)
+        if not entries:
+            print("No history available.")
+            return
+        print(f"\nLast {min(n, len(entries))} calculations:")
+        for i, entry in enumerate(entries, 1):
+            print(f"  {i}. {entry['operation']} ({entry['timestamp']})")
+        print()
 
     def run_single(self, expression: str) -> Union[int, float]:
         """
