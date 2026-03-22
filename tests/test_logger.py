@@ -178,3 +178,39 @@ class TestLoggerLevels:
             with open(log_path, 'r') as f:
                 content = f.read()
             assert len(content) > 0
+
+    def test_log_warning_level(self):
+        """Test logging at WARNING level."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            logger = OperationLogger(Path(tmpdir) / "test.log")
+            logger.log("warning message", LogLevel.WARNING)
+            
+            log_path = Path(tmpdir) / "test.log"
+            with open(log_path, 'r') as f:
+                content = f.read()
+            assert "WARNING" in content or "warning" in content.lower()
+
+    def test_log_warning_method(self):
+        """Test log_warning helper method."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            logger = OperationLogger(Path(tmpdir) / "test.log")
+            logger.log_warning("This is a warning")
+            
+            log_path = Path(tmpdir) / "test.log"
+            with open(log_path, 'r') as f:
+                content = f.read()
+            assert "WARNING" in content
+            assert "This is a warning" in content
+
+    def test_multiple_warnings(self):
+        """Test logging multiple warnings."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            logger = OperationLogger(Path(tmpdir) / "test.log")
+            logger.log_warning("warning 1")
+            logger.log_warning("warning 2")
+            logger.log_warning("warning 3")
+            
+            log_path = Path(tmpdir) / "test.log"
+            with open(log_path, 'r') as f:
+                lines = f.readlines()
+            assert len(lines) == 3

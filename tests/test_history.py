@@ -131,3 +131,49 @@ class TestCalculationHistoryClear:
             history = CalculationHistory(Path(tmpdir) / "history.json")
             history.clear()  # Should not raise error
             assert len(history.get_history()) == 0
+
+
+class TestCalculationHistoryErrorHandling:
+    """Test cases for error handling in history."""
+
+    def test_load_corrupted_json_file(self):
+        """Test loading from corrupted JSON file."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "history.json"
+            
+            # Create corrupted JSON file
+            with open(path, 'w') as f:
+                f.write("{ invalid json }")
+            
+            # Should not raise error, should initialize empty history
+            history = CalculationHistory(path)
+            assert len(history.get_history()) == 0
+
+    def test_load_malformed_json_then_add(self):
+        """Test that corrupted file is replaced with valid data."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "history.json"
+            
+            # Create corrupted JSON file
+            with open(path, 'w') as f:
+                f.write("{ bad json }")
+            
+            # Load and add new entry
+            history = CalculationHistory(path)
+            history.add("5 + 3 = 8")
+            
+            # Verify new entry was added
+            entries = history.get_history()
+            assert len(entries) == 1
+            assert entries[0]["operation"] == "5 + 3 = 8"
+
+    def test_history_creates_directory_if_missing(self):
+        """Test that history creates parent directory if it doesn't exist."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "subdir" / "history.json"
+            history = CalculationHistory(path)
+            history.add("5 + 3 = 8")
+            
+            # Verify the file was created
+            assert path.exists()
+            assert len(history.get_history()) == 1
