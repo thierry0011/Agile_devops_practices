@@ -154,10 +154,34 @@ poetry run pytest tests/ -q
 poetry run pytest tests/ --cov=src/agile_devops_practices_lab --cov-report=html
 ```
 
+After running, view the HTML coverage report:
+```bash
+# Open coverage report in browser (Windows)
+start htmlcov/index.html
+
+# Open coverage report in browser (macOS)
+open htmlcov/index.html
+
+# Open coverage report in browser (Linux)
+xdg-open htmlcov/index.html
+```
+
 ### Run Specific Test File
 ```bash
 poetry run pytest tests/test_calculator_add.py -v
 ```
+
+### Coverage Reports
+
+**Local Development:**
+- Generate: `poetry run pytest tests/ --cov=src/agile_devops_practices_lab --cov-report=html`
+- View: Open `htmlcov/index.html` in your browser
+- Location: `htmlcov/` directory (auto-generated, not tracked in git)
+
+**CI/CD Pipeline:**
+- GitHub Actions generates coverage reports on every push
+- View coverage artifacts: Go to [Actions](https://github.com/thierry0011/Agile_devops_practices/actions) → Select workflow run → Download `coverage-report-3.14` artifact
+- Codecov integration: Automatically tracks coverage trends (if enabled)
 
 ### Coverage Summary
 - **Overall**: 95% code coverage
