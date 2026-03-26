@@ -75,3 +75,17 @@ class Calculator:
         if b == 0:
             raise ValueError("Division by zero is not allowed")
         return a / b
+
+    @staticmethod
+    def power(base: Union[int, float], exponent: Union[int, float]) -> Union[int, float]:
+        """
+        Raise a number to a power.
+        
+        Args:
+            base: The base number
+            exponent: The exponent to raise the base to
+            
+        Returns:
+            Result of base raised to the exponent
+        """
+        return base ** exponent
