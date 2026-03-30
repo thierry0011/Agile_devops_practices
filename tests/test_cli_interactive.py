@@ -50,8 +50,8 @@ class TestCLIInteractiveMode:
             cli.history.filepath = Path(tmpdir) / "history.json"
             cli.logger.filepath = Path(tmpdir) / "logs.txt"
             
-            # Mock input to perform calculation then exit
-            with mock.patch('builtins.input', side_effect=['5 + 3', 'exit']):
+            # Mock input: first number, second number, operation, then exit
+            with mock.patch('builtins.input', side_effect=['5', '3', '+', 'exit']):
                 with mock.patch('sys.stdout', new=StringIO()):
                     cli.run_interactive()
             
@@ -121,8 +121,8 @@ class TestCLIInteractiveMode:
             cli.history.filepath = Path(tmpdir) / "history.json"
             cli.logger.filepath = Path(tmpdir) / "logs.txt"
             
-            # Mock input with invalid operation then exit
-            with mock.patch('builtins.input', side_effect=['5 ^ 3', 'exit']):
+            # Mock input with invalid first number then exit
+            with mock.patch('builtins.input', side_effect=['invalid', 'exit']):
                 with mock.patch('sys.stdout', new=StringIO()):
                     cli.run_interactive()
             
@@ -137,7 +137,7 @@ class TestCLIInteractiveMode:
             cli.logger.filepath = Path(tmpdir) / "logs.txt"
             
             # Mock input with empty line, then valid calc, then exit
-            with mock.patch('builtins.input', side_effect=['', '5 + 3', 'exit']):
+            with mock.patch('builtins.input', side_effect=['', '5', '3', '+', 'exit']):
                 with mock.patch('sys.stdout', new=StringIO()):
                     cli.run_interactive()
             
@@ -151,7 +151,7 @@ class TestCLIInteractiveMode:
             cli.logger.filepath = Path(tmpdir) / "logs.txt"
             
             # Mock input with division by zero then exit
-            with mock.patch('builtins.input', side_effect=['5 / 0', 'exit']):
+            with mock.patch('builtins.input', side_effect=['5', '0', '/', 'exit']):
                 with mock.patch('sys.stdout', new=StringIO()):
                     cli.run_interactive()
             
@@ -166,7 +166,7 @@ class TestCLIInteractiveMode:
             cli.logger.filepath = Path(tmpdir) / "logs.txt"
             
             # Mock input with multiple operations then exit
-            with mock.patch('builtins.input', side_effect=['5 + 3', '10 - 2', '4 * 5', 'exit']):
+            with mock.patch('builtins.input', side_effect=['5', '3', '+', '10', '2', '-', '4', '5', '*', 'exit']):
                 with mock.patch('sys.stdout', new=StringIO()):
                     cli.run_interactive()
             
@@ -182,7 +182,7 @@ class TestCLIInteractiveMode:
             cli.logger.filepath = Path(tmpdir) / "logs.txt"
             
             # Mock input to perform calculation then exit
-            with mock.patch('builtins.input', side_effect=['5 + 3', 'exit']):
+            with mock.patch('builtins.input', side_effect=['5', '3', '+', 'exit']):
                 with mock.patch('sys.stdout', new=StringIO()):
                     cli.run_interactive()
             
@@ -202,7 +202,7 @@ class TestCLIInteractiveMode:
             cli.logger.filepath = Path(tmpdir) / "logs.txt"
             
             # Mock input with invalid input then exit
-            with mock.patch('builtins.input', side_effect=['abc + 5', 'exit']):
+            with mock.patch('builtins.input', side_effect=['abc', 'exit']):
                 with mock.patch('sys.stdout', new=StringIO()):
                     cli.run_interactive()
             

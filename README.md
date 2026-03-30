@@ -191,6 +191,24 @@ poetry run pytest tests/test_calculator_add.py -v
 - **Logger**: 100%
 - **CLI**: 92%
 
+## Test Evidence & Coverage
+
+Below is the test execution and coverage report demonstrating comprehensive testing across all modules:
+
+#####![alt text](image.png)
+
+**Test Execution Metrics:**
+- **177 Tests Passed** - 100% test pass rate across all test suites
+- **88% Code Coverage** - Comprehensive coverage on core modules (Calculator, Validator, Logger, History)
+- **CLI Coverage**: 92% - Interactive mode and display commands thoroughly tested
+- **Execution Time**: 1.35 seconds - Complete test suite runs efficiently
+- **Test Categories**:
+  - Calculator operations (addition, subtraction, multiplication, division)
+  - Input validation and error handling
+  - CLI interactive commands and display
+  - History persistence and management
+  - Operation and error logging with timestamps
+
 ## Output Files
 
 The application generates two persistence files:

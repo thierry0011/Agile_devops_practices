@@ -34,18 +34,68 @@ class CLI:
 
     def display_help(self):
         """Display help message."""
-        print("\nUsage: Enter two numbers and an operation")
-        print("Examples:")
-        print("  5 + 3")
-        print("  10 - 4")
-        print("  6 * 7")
-        print("  20 / 4")
+        print("\nAvailable operations: + (add), - (subtract), * (multiply), / (divide)")
         print("\nCommands:")
+        print("  help        - Show this help message")
         print("  history     - Show last 10 calculations")
         print("  history N   - Show last N calculations")
         print("  clear       - Clear history")
+        print("  exit        - Quit the calculator")
         print()
 
+    def _get_operation_hint(self, operation: str) -> str:
+        """Get a helpful hint for the operation."""
+        hints = {
+            '+': '(addition)',
+            '-': '(subtraction)',
+            '*': '(multiplication)',
+            '/': '(division)'
+        }
+        return hints.get(operation, '')
+
+    def _get_number_input(self, prompt: str) -> Union[int, float]:
+        """
+        Get and validate a number from user input.
+        
+        Args:
+            prompt: Prompt to display
+            
+        Returns:
+            Validated number
+            
+        Raises:
+            ValidationError: If input is not a valid number
+        """
+        while True:
+            try:
+                user_input = input(prompt).strip()
+                if not user_input:
+                    print("Please enter a valid number.")
+                    continue
+                num = self.validator.validate_numbers(user_input, "0")[0]
+                return num
+            except ValidationError as e:
+                print(f"Invalid input: {e}. Please try again.")
+
+    def _get_operation_input(self) -> str:
+        """
+        Get and validate an operation from user input.
+        
+        Returns:
+            Validated operation symbol
+            
+        Raises:
+            ValidationError: If operation is not valid
+        """
+        while True:
+            user_input = input("Operation (+, -, *, /): ").strip()
+            if not user_input:
+                print("Please enter a valid operation.")
+                continue
+            if self.validator.is_valid_operation(user_input):
+                return user_input
+            else:
+                print(f"Invalid operation: {user_input}. Please use +, -, *, or /")
 
     def parse_input(self, user_input: str) -> tuple:
         """
@@ -108,42 +158,69 @@ class CLI:
         
         while self.running:
             try:
-                user_input = input(">>> ").strip()
+                # Display menu prompt
+                first_input = input("\nEnter first number (or 'help'/'history'/'clear'/'exit'): ").strip()
                 
-                if not user_input:
+                if not first_input:
                     continue
                 
-                if user_input.lower() == 'exit':
+                if first_input.lower() == 'exit':
                     print("Goodbye!")
                     self.running = False
                     break
                 
-                if user_input.lower() == 'help':
+                if first_input.lower() == 'help':
                     self.display_help()
                     continue
                 
-                if user_input.lower() == 'history':
+                if first_input.lower() == 'history':
                     self._show_history(10)
                     continue
                 
-                if user_input.lower().startswith('history '):
+                if first_input.lower().startswith('history '):
                     try:
-                        n = int(user_input.split()[1])
+                        n = int(first_input.split()[1])
                         self._show_history(n)
                     except (ValueError, IndexError):
                         print("Usage: history [N]")
                     continue
                 
-                if user_input.lower() == 'clear':
+                if first_input.lower() == 'clear':
                     self.history.clear()
                     print("History cleared.")
                     self.logger.log("History cleared")
                     continue
                 
-                num1, operation, num2 = self.parse_input(user_input)
-                result = self.execute_operation(num1, operation, num2)
+                # Get first number
+                try:
+                    num1 = self.validator.validate_numbers(first_input, "0")[0]
+                except ValidationError as e:
+                    print(f"Invalid first number: {e}")
+                    self.logger.log_error(f"Invalid first number: {e}")
+                    continue
                 
-                print(f"Result: {num1} {operation} {num2} = {result}")
+                # Get second number
+                try:
+                    second_input = input("Enter second number: ").strip()
+                    if not second_input:
+                        print("Second number required.")
+                        continue
+                    num2 = self.validator.validate_numbers(second_input, "0")[0]
+                except ValidationError as e:
+                    print(f"Invalid second number: {e}")
+                    self.logger.log_error(f"Invalid second number: {e}")
+                    continue
+                
+                # Get operation
+                operation = self._get_operation_input()
+                
+                # Execute operation
+                result = self.execute_operation(num1, operation, num2)
+                hint = self._get_operation_hint(operation)
+                
+                print(f"\n{'='*40}")
+                print(f"Result: {num1} {operation} {num2} = {result} {hint}")
+                print(f"{'='*40}\n")
                 
                 # Log and save to history
                 self.logger.log_operation(num1, operation, num2, result)

@@ -42,8 +42,7 @@ class TestCLIDisplay:
         cli.display_help()
         
         captured = capsys.readouterr()
-        assert "Usage" in captured.out
-        assert "Examples" in captured.out
+        assert "operations" in captured.out.lower()
 
     def test_display_help_shows_commands(self, capsys):
         """Test display_help shows available commands."""
@@ -53,14 +52,15 @@ class TestCLIDisplay:
         captured = capsys.readouterr()
         assert "history" in captured.out
         assert "clear" in captured.out
+        assert "exit" in captured.out
 
     def test_display_help_shows_examples(self, capsys):
-        """Test display_help shows calculation examples."""
+        """Test display_help shows operation symbols."""
         cli = CLI()
         cli.display_help()
         
         captured = capsys.readouterr()
-        assert "5 + 3" in captured.out or "+" in captured.out
+        assert "+" in captured.out or "*" in captured.out or "/" in captured.out
 
     def test_display_welcome_and_help_sequence(self, capsys):
         """Test calling welcome and help in sequence."""
@@ -70,7 +70,7 @@ class TestCLIDisplay:
         
         captured = capsys.readouterr()
         assert "Welcome" in captured.out
-        assert "Usage" in captured.out
+        assert "Available operations" in captured.out or "operations" in captured.out.lower()
 
 
 class TestCLIShowHistory:

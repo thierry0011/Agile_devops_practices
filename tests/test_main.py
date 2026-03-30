@@ -15,5 +15,5 @@ def test_main_imports_successfully():
 
 def test_main_module_executable():
     """Test that __main__ module is executable."""
-    import agile_devops_practices_lab.__main__
-    assert hasattr(agile_devops_practices_lab.__main__, '__name__')
+    import agile_devops_practices_lab.main
+    assert hasattr(agile_devops_practices_lab.main, '__name__')
