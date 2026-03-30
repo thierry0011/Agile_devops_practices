@@ -81,6 +81,19 @@ poetry install
 poetry run pytest tests/ -q
 ```
 
+## Important Links
+
+**Repository & Documentation:**
+- **Main Repository**: [GitHub - Agile_devops_practices](https://github.com/thierry0011/Agile_devops_practices)
+- **CI/CD Workflows**: [GitHub Actions](https://github.com/thierry0011/Agile_devops_practices/actions)
+- **Issues & Features**: [GitHub Issues](https://github.com/thierry0011/Agile_devops_practices/issues)
+- **Pull Requests**: [GitHub Pull Requests](https://github.com/thierry0011/Agile_devops_practices/pulls)
+
+**Project Files:**
+- **Main Workflow**: [.github/workflows/main.yml](https://github.com/thierry0011/Agile_devops_practices/blob/main/.github/workflows/main.yml)
+- **Project Config**: [pyproject.toml](https://github.com/thierry0011/Agile_devops_practices/blob/main/pyproject.toml)
+- **Documentation**: [docs/](https://github.com/thierry0011/Agile_devops_practices/tree/main/docs)
+
 ## Usage
 
 ### Running the Calculator
@@ -99,24 +112,17 @@ python -m agile_devops_practices_lab
 
 Once running, use the following commands:
 
-- **Perform a calculation**: `<number> <operation> <number>`
-  - Example: `5 + 3` → Result: `5 + 3 = 8`
+- **Perform a calculation**: Enter first number → second number → operation
   - Supported operations: `+` (add), `-` (subtract), `*` (multiply), `/` (divide)
+  - Example: `5` → `3` → `+` → Result: `5 + 3 = 8 (addition)`
 
-- **Show help**: `help`
-  - Displays all available commands and usage instructions
+- **Show help**: Type `help`
 
-- **View calculation history**: `history`
-  - Shows the last 10 calculations with timestamps
+- **View calculation history**: Type `history` or `history N` (e.g., `history 5`)
 
-- **View specific number of history entries**: `history N`
-  - Example: `history 5` → Shows last 5 calculations
+- **Clear history**: Type `clear`
 
-- **Clear history**: `clear`
-  - Removes all calculation records
-
-- **Exit calculator**: `exit`
-  - Gracefully exits the application
+- **Exit**: Type `exit`
 
 ### Example Session
 
@@ -127,18 +133,15 @@ Welcome to Agile & DevOps Calculator
 Operations: + (add), - (subtract), * (multiply), / (divide)
 Type 'exit' to quit
 
->>> 5 + 3
-Result: 5 + 3 = 8
+Enter first number (or 'help'/'history'/'clear'/'exit'): 5
+Enter second number: 3
+Operation (+, -, *, /): +
 
->>> 10 - 2
-Result: 10 - 2 = 8
+========================================
+Result: 5 + 3 = 8 (addition)
+========================================
 
->>> history
-Last 2 calculations:
-  1. 5 + 3 = 8 (2026-03-22 14:30:45)
-  2. 10 - 2 = 8 (2026-03-22 14:31:12)
-
->>> exit
+Enter first number (or 'help'/'history'/'clear'/'exit'): exit
 Goodbye!
 ```
 
@@ -154,60 +157,64 @@ poetry run pytest tests/ -q
 poetry run pytest tests/ --cov=src/agile_devops_practices_lab --cov-report=html
 ```
 
-After running, view the HTML coverage report:
-```bash
-# Open coverage report in browser (Windows)
-start htmlcov/index.html
-
-# Open coverage report in browser (macOS)
-open htmlcov/index.html
-
-# Open coverage report in browser (Linux)
-xdg-open htmlcov/index.html
-```
-
 ### Run Specific Test File
 ```bash
 poetry run pytest tests/test_calculator_add.py -v
 ```
 
-### Coverage Reports
-
-**Local Development:**
-- Generate: `poetry run pytest tests/ --cov=src/agile_devops_practices_lab --cov-report=html`
-- View: Open `htmlcov/index.html` in your browser
-- Location: `htmlcov/` directory (auto-generated, not tracked in git)
-
-**CI/CD Pipeline:**
-- GitHub Actions generates coverage reports on every push
-- View coverage artifacts: Go to [Actions](https://github.com/thierry0011/Agile_devops_practices/actions) → Select workflow run → Download `coverage-report-3.14` artifact
-- Codecov integration: Automatically tracks coverage trends (if enabled)
-
-### Coverage Summary
-- **Overall**: 95% code coverage
-- **Calculator**: 100%
-- **Validator**: 100%
-- **History**: 100%
-- **Logger**: 100%
-- **CLI**: 92%
-
 ## Test Evidence & Coverage
 
-Below is the test execution and coverage report demonstrating comprehensive testing across all modules:
+Test execution and coverage report demonstrating comprehensive testing across all modules:
 
-#####![alt text](image.png)
+![Test Coverage Report](image.png)
 
-**Test Execution Metrics:**
-- **177 Tests Passed** - 100% test pass rate across all test suites
-- **88% Code Coverage** - Comprehensive coverage on core modules (Calculator, Validator, Logger, History)
-- **CLI Coverage**: 92% - Interactive mode and display commands thoroughly tested
-- **Execution Time**: 1.35 seconds - Complete test suite runs efficiently
-- **Test Categories**:
-  - Calculator operations (addition, subtraction, multiplication, division)
-  - Input validation and error handling
-  - CLI interactive commands and display
-  - History persistence and management
-  - Operation and error logging with timestamps
+**Coverage Report Details:**
+- **177 Tests Passed** - 100% test pass rate
+- **88% Code Coverage** - All core modules thoroughly tested
+- **Execution Time**: ~1.74 seconds
+- **Test Categories**: Calculator operations, input validation, CLI commands, history persistence, logging
+
+**Module Coverage:**
+| Module | Coverage | Status |
+|--------|----------|--------|
+| Calculator | 95% | ✅ Excellent |
+| Validator | 100% | ✅ Complete |
+| History | 100% | ✅ Complete |
+| Logger | 100% | ✅ Complete |
+| CLI | 80% | ✅ Good |
+| Overall | 88% | ✅ Strong |
+
+**Access Coverage Report:**
+- **Local**: After running `poetry run pytest tests/ --cov`, open `htmlcov/index.html` in browser
+- **CI/CD**: View on [GitHub Actions](https://github.com/thierry0011/Agile_devops_practices/actions)
+- **Repository**: Coverage artifacts available in workflow runs
+
+## Monitoring & Logging Evidence
+
+Structured logging provides complete audit trail of all operations and errors:
+
+### Log Output Example
+```
+[2026-03-30 12:02:02] INFO: Operation: 20 - 10 = 10
+[2026-03-30 11:59:18] INFO: Operation: 10 / 30 = 0.3333333333333333
+[2026-03-30 11:59:03] INFO: History cleared
+[2026-03-30 11:55:54] INFO: Operation: 10 / 2 = 5.0
+[2026-03-30 11:55:46] INFO: Operation: 4 + 2 = 6
+[2026-03-30 11:55:40] ERROR: Please enter: <number> <operation> <number>
+```
+
+**Logging Features:**
+- **Timestamps**: ISO 8601 format for every log entry
+- **Log Levels**: INFO, WARNING, ERROR classifications
+- **Operation Tracking**: Complete record of all calculations with inputs and results
+- **Error Logging**: All validation and runtime errors captured
+- **Persistent Storage**: All logs written to `logs.txt` for audit compliance
+
+**Log Management:**
+- Location: `logs.txt` (root directory)
+- Format: Structured text with timestamps and log levels
+- Auto-rotation: New entries appended to file
+- Error Recovery: Automatic directory creation if missing
 
 ## Output Files
 
@@ -244,56 +251,47 @@ Logs all operations and errors:
 |--------|-------|
 | Total Tests | 177 |
 | Test Pass Rate | 100% |
-| Code Coverage | 95% |
+| Code Coverage | 88-95% |
 | Python Version | 3.14+ |
 | Core Modules | 7 |
 | Sprint Cycles | 2 |
 | User Stories Implemented | 8 |
 
-### Git Workflow
+### Git Workflow & Commit History
 
-The project uses feature branch workflow:
-- `main` - Production-ready code with merge commits
+The project follows a three-branch git flow:
+- `main` - Production-ready code
 - `develop` - Integration branch
 - `feature/*` - Feature development branches
 
-Each sprint delivers features through dedicated feature branches:
-- `feature/addition` - US1: Addition operations
-- `feature/subtraction` - US2: Subtraction operations
-- `feature/multiplication` - US3: Multiplication operations
-- `feature/division` - US4: Division operations
-- `feature/input-validation` - US5: Input validation
-- `feature/history` - US6: Calculation history
-- `feature/ci-cd-setup` - US7: CI/CD pipeline
-- `feature/logging` - US8: Operation logging
+**Commit History:**
 
-### Agile Metrics
+![Git Commit History](screenshots/commits.png)
 
-**Sprint 1** (12 story points):
-- User Stories: 5 (US1, US2, US5, US7, Integration)
-- Tests: 78 → Coverage: 60%
-- Time: 1 sprint cycle
+Key milestones include:
+- Setup and project initialization
+- Feature implementation (addition, subtraction, multiplication, division)
+- Input validation and error handling
+- History persistence and calculation logging
+- CI/CD pipeline setup and configuration
+- Test coverage improvements and documentation
 
-**Sprint 2** (13 story points):
-- User Stories: 4 (US3, US4, US6, US8)
-- Tests: 177 total → Coverage: 95%
-- Time: 1 sprint cycle
+View complete commit history: [GitHub Commits](https://github.com/thierry0011/Agile_devops_practices/commits)
 
-## CI/CD Pipeline
+## CI/CD Pipeline & Workflows
 
-GitHub Actions workflow (`main.yml`):
-- **Triggers**: Pushes to main/develop, feature branches, and PRs
-- **Python Versions**: 3.14
-- **Steps**:
-  1. Setup Python environment
-  2. Cache Poetry artifacts
-  3. Install dependencies
-  4. Lint with flake8
-  5. Run pytest with coverage
-  6. Check code formatting (Black, isort)
-  7. Build artifacts
+Automated testing and deployment via GitHub Actions:
 
-View workflow runs: [GitHub Actions](https://github.com/thierry0011/Agile_devops_practices/actions)
+- **All Workflows**: [GitHub Actions](https://github.com/thierry0011/Agile_devops_practices/actions)
+- **Latest Runs**: Automated tests, code quality checks, and deployment on every commit
+- **Python Versions**: 3.14 compatibility verified
+- **Testing**: pytest with coverage reporting (88% coverage) on every push
+- **Code Quality**: Linting and formatting validation (flake8, Black, isort)
+- **Artifacts**: Coverage reports and test results available for every workflow run
+
+**Workflow File**: [.github/workflows/main.yml](https://github.com/thierry0011/Agile_devops_practices/blob/main/.github/workflows/main.yml)
+
+**View Workflow Runs**: [All Runs](https://github.com/thierry0011/Agile_devops_practices/actions) • [Latest Success](https://github.com/thierry0011/Agile_devops_practices/actions?query=conclusion%3Asuccess)
 
 ## Error Handling
 
@@ -326,17 +324,6 @@ The calculator handles various error scenarios:
 
 This is a lab project for Agile & DevOps practices education.
 
-## Authors
-
-- **Thierry Kwizera** - Initial implementation
-
-## Acknowledgments
-
-- Agile Manifesto principles for iterative development
-- DevOps best practices for CI/CD pipeline
-- Test-Driven Development (TDD) methodology
-
 ---
 
-**Last Updated**: March 22, 2026  
-**Python Version**: 3.14.3  
+**Last Updated**: March 30, 2026  
