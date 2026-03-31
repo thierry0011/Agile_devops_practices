@@ -1,3 +1,6 @@
+# Email: thierry.kwizera@amalitech.com
+# Specialization: Python Backend & Ai development
+
 # Agile & DevOps Practices Lab
 
 A comprehensive calculator application demonstrating Agile software development and DevOps practices through two simulated sprint cycles.
